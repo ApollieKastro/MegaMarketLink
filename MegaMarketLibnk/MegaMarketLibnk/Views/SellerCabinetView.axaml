@@ -1,0 +1,80 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:MegaMarketLibnk.ViewModels"
+             x:Class="MegaMarketLibnk.Views.SellerCabinetView"
+             x:DataType="vm:SellerCabinetViewModel">
+    <Grid RowDefinitions="Auto,*" Background="#141417">
+        <Border Grid.Row="0" Background="#1F1F24" Padding="24,12">
+            <Grid ColumnDefinitions="*,Auto">
+                <TextBlock Text="Панель продавца: Управление складом" FontSize="21" FontWeight="Bold" Foreground="White" />
+                <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8">
+                    <Button Classes="secondary" Content="Обновить" Command="{Binding RefreshCommand}" />
+                    <Button Classes="secondary" Content="На главную" Command="{Binding GoHomeCommand}" />
+                    <Button Classes="secondary" Content="Выйти" Command="{Binding LogoutCommand}" />
+                </StackPanel>
+            </Grid>
+        </Border>
+        <ScrollViewer Grid.Row="1">
+            <StackPanel Margin="24" Spacing="12">
+                <Border Background="#1F1F24" CornerRadius="8" Padding="12">
+                    <StackPanel Spacing="8">
+                        <TextBlock Text="Пакетное изменение остатков" Foreground="White" FontWeight="Bold" />
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <TextBox Width="120" Text="{Binding BatchDelta}" />
+                            <Button Content="Применить ко всем" Command="{Binding BatchUpdateCommand}" />
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+                <Border Background="#1F1F24" CornerRadius="8" Padding="12">
+                    <StackPanel Spacing="8">
+                        <TextBlock Text="Добавить товар" Foreground="White" FontWeight="Bold" /> 
+                        <TextBlock Text="Название" Foreground="White" />
+                        <TextBox PlaceholderText="Название" Text="{Binding NewName}" />
+                        <TextBlock Text="Артикул (SKU)" Foreground="White" />
+                        <TextBox PlaceholderText="Артикул" Text="{Binding NewSku}" />
+                        <TextBlock Text="Цена" Foreground="White" />
+                        <TextBox PlaceholderText="Цена" Text="{Binding NewPrice}" />
+                        <TextBlock Text="Количество" Foreground="White" />
+                        <TextBox PlaceholderText="Количество" Text="{Binding NewQty}" />
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <Button Content="Добавить" Command="{Binding AddProductCommand}" />
+                            <ProgressBar IsIndeterminate="True" IsVisible="{Binding IsAdding}" Width="120" Height="4" VerticalAlignment="Center" />
+                        </StackPanel>
+                        <TextBlock Text="{Binding AddStatus}" Foreground="#B9B9C3" FontSize="12" />
+                    </StackPanel>
+                </Border>
+                <ItemsControl ItemsSource="{Binding Products}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate x:DataType="vm:SellerProductRow">
+                        <Border Background="#1F1F24" CornerRadius="8" Padding="12" Margin="0,0,0,8">
+                            <StackPanel Spacing="6">
+                                <Grid ColumnDefinitions="*,Auto">
+                                    <TextBlock Text="{Binding Name}" Foreground="White" FontWeight="SemiBold" />
+                                    <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8">
+                                        <TextBlock Text="{Binding TotalStock, StringFormat='Остаток: {0}'}" Foreground="White" />
+                                        <TextBlock Text="Низкий запас" Foreground="#F87171" IsVisible="{Binding LowStock}" />
+                                    </StackPanel>
+                                </Grid>
+                                <TextBlock Text="{Binding Sku}" Foreground="#B9B9C3" FontSize="12" />
+                                <TextBlock Text="{Binding DbStatus, StringFormat='Статус: {0}'}" Foreground="#4ADE80" FontSize="12" />
+                                <TextBlock Text="{Binding Price, StringFormat='Цена: {0:0.00} ₽'}" Foreground="#4ADE80" />
+                                <ItemsControl ItemsSource="{Binding Stocks}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate x:DataType="vm:SellerStockRow">
+                                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                                <TextBlock Foreground="#B9B9C3" FontSize="12" Text="{Binding WarehouseName}" VerticalAlignment="Center" />
+                                                <TextBox Width="80" Text="{Binding EditableQty}" />
+                                                <Button Content="Сохранить" Command="{Binding $parent[UserControl].((vm:SellerCabinetViewModel)DataContext).SaveStockCommand}" CommandParameter="{Binding}" />
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

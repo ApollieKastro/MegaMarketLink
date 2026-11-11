@@ -1,0 +1,64 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:MegaMarketLibnk.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="1166" d:DesignHeight="643"
+             x:Class="MegaMarketLibnk.Views.AuthView"
+             x:DataType="vm:AuthViewModel">
+    <Design.DataContext>
+        <vm:AuthViewModel />
+    </Design.DataContext>
+    <Border Background="#CC1B1B1F"
+            BorderBrush="#33FFFFFF"
+            BorderThickness="1"
+            CornerRadius="16"
+            Padding="32"
+            Width="440"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center">
+        <StackPanel Spacing="8">
+            <TextBlock Text="Вход в аккаунт"  FontSize="26" FontWeight="Bold" Foreground="White"  HorizontalAlignment="Center"  Margin="0,0,0,8" />
+            <TextBox PlaceholderText="Email"
+                     Text="{Binding Email, Mode=TwoWay}" />
+            <TextBlock Classes="hint" Text="{Binding EmailHint}" Foreground="{Binding EmailHint,
+                    Converter={StaticResource HintBrush}}" />
+            <TextBox PlaceholderText="Пароль" PasswordChar="•" Text="{Binding Password, Mode=TwoWay}" />
+            <TextBlock Classes="hint" Text="{Binding PasswordHint}"
+                       Foreground="{Binding PasswordHint, Converter={StaticResource HintBrush}}" />
+            <Border Background="#26FFFFFF" CornerRadius="8" Padding="12,8"  Margin="0,6,0,0">
+                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
+                    <TextBlock Text="{Binding CaptchaCode}"
+                               FontFamily="Consolas,Menlo,monospace"
+                               FontSize="24"
+                               FontWeight="Bold"
+                               Foreground="#FFD166"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               RenderTransform="rotate(-4deg)" />
+                    <Button Grid.Column="1"
+                            Content="Обновить"
+                            Classes="secondary"
+                            Command="{Binding RefreshCaptchaCommand}"
+                            VerticalAlignment="Center" />
+                </Grid>
+            </Border>
+            <TextBox PlaceholderText="Код с картинки"
+                     Text="{Binding CaptchaInput, Mode=TwoWay}" />
+            <TextBlock Classes="hint"
+                       Text="{Binding CaptchaHint}"
+                       Foreground="{Binding CaptchaHint, Converter={StaticResource HintBrush}}" />
+            <Button Classes="primary"
+                    Content="Войти"
+                    Command="{Binding LoginCommand}"
+                    HorizontalAlignment="Stretch"
+                    Margin="0,8,0,0" />
+            <Button Classes="secondary"
+                    Content="Регистрация"
+                    Command="{Binding GoToRegisterCommand}"
+                    HorizontalAlignment="Stretch" />
+            <TextBlock Text="{Binding Info}" Foreground="#FFD166"  FontSize="13" TextWrapping="Wrap"  HorizontalAlignment="Center"
+                       Margin="0,6,0,0" />
+        </StackPanel>
+    </Border>
+</UserControl>

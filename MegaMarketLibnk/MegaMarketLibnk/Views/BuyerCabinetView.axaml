@@ -1,0 +1,57 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:MegaMarketLibnk.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="1166" d:DesignHeight="643"
+             x:Class="MegaMarketLibnk.Views.BuyerCabinetView"
+             x:DataType="vm:BuyerCabinetViewModel">
+    <Design.DataContext>
+        <vm:BuyerCabinetViewModel />
+    </Design.DataContext>
+    <Grid RowDefinitions="Auto,*" Background="#141417">
+        <Border Grid.Row="0" Background="#1F1F24" Padding="24,12">
+            <Grid ColumnDefinitions="*,Auto">
+                <TextBlock Text="Личный кабинет покупателя" FontSize="21" FontWeight="Bold" Foreground="White" VerticalAlignment="Center" />
+                <Button Grid.Column="1" Classes="secondary" Content="На главную" Command="{Binding GoHomeCommand}" />
+                <Button Classes="secondary" Content="Выйти" Command="{Binding LogoutCommand}" />
+            </Grid>
+        </Border> 
+        <ScrollViewer Grid.Row="1">
+            <StackPanel Margin="24" Spacing="16">
+                <Border Background="#1F1F24" CornerRadius="12" Padding="16">
+                    <StackPanel Spacing="4">
+                        <TextBlock Text="{Binding FullName}" FontSize="18" FontWeight="Bold" Foreground="White" />
+                        <TextBlock Text="{Binding Email}" Foreground="#B9B9C3" />
+                    </StackPanel>
+                </Border>
+                <TextBlock Text="История заказов" FontSize="18" FontWeight="Bold" Foreground="White" />
+                <ItemsControl ItemsSource="{Binding Orders}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate x:DataType="vm:BuyerOrderViewModel" x:CompileBindings="False">
+                            <Border Background="#1F1F24" CornerRadius="12" Padding="16" Margin="0,0,0,12">
+                                <StackPanel Spacing="8">
+                                    <Grid ColumnDefinitions="*,Auto">
+                                        <TextBlock Text="{Binding OrderDateText}" Foreground="White" FontWeight="SemiBold" />
+                                        <TextBlock Grid.Column="1" Text="{Binding TotalText}" Foreground="#4ADE80" FontWeight="Bold" />
+                                    </Grid>
+                                    <TextBlock Text="{Binding Status}" Foreground="#FFD166" />
+                                    <Grid ColumnDefinitions="*,*,*" Margin="0,6,0,0">
+                                        <Border Height="6" Background="{Binding Seg0}" />
+                                        <Border Grid.Column="1" Height="6" Background="{Binding Seg1}" />
+                                        <Border Grid.Column="2" Height="6" Background="{Binding Seg2}" />
+                                    </Grid>
+                                    <Grid ColumnDefinitions="*,*,*">
+                                        <TextBlock Text="Сборка" Foreground="#B9B9C3" FontSize="12" />
+                                        <TextBlock Grid.Column="1" Text="В пути" Foreground="#B9B9C3" FontSize="12" HorizontalAlignment="Center" />
+                                        <TextBlock Grid.Column="2" Text="Доставлено" Foreground="#B9B9C3" FontSize="12" HorizontalAlignment="Right" />
+                                    </Grid>
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

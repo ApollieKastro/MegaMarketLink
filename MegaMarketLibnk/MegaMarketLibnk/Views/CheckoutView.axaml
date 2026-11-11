@@ -1,0 +1,257 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:MegaMarketLibnk.ViewModels"
+             xmlns:models="using:MegaMarketLibnk.Models"
+             mc:Ignorable="d" d:DesignWidth="1400" d:DesignHeight="800"
+             x:Class="MegaMarketLibnk.Views.CheckoutView"
+             x:DataType="vm:CheckoutViewModel">
+    <UserControl.Styles>
+        <Style Selector="TextBox.error">
+            <Setter Property="BorderBrush" Value="#F87171" />
+            <Setter Property="BorderThickness" Value="2" />
+        </Style>
+        <Style Selector="TextBlock.hint">
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="Margin" Value="4,0,0,4" />
+        </Style>
+        <Style Selector="TextBlock.sectionTitle">
+            <Setter Property="FontSize" Value="15" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="Margin" Value="0,0,0,4" />
+        </Style>
+    </UserControl.Styles>
+    <Grid RowDefinitions="Auto,*" Background="#141417">
+        <Border Grid.Row="0" Background="#1F1F24" Padding="24,12">
+            <StackPanel Orientation="Horizontal" Spacing="16">
+                <Button Classes="secondary" Content="← В корзину" Command="{Binding BackCommand}" />
+                <TextBlock Text="Оформление заказа" FontSize="21" FontWeight="Bold"
+                           Foreground="White" VerticalAlignment="Center" />
+            </StackPanel>
+        </Border>
+        <ScrollViewer Grid.Row="1" Margin="28,24">
+            <Grid ColumnDefinitions="7*,5*" ColumnSpacing="24" MaxWidth="1200"
+                  HorizontalAlignment="Left">
+                <StackPanel Grid.Column="0" Spacing="16" IsVisible="{Binding IsFormVisible}">
+                    <Border Background="#1F1F24" CornerRadius="14" Padding="20">
+                        <StackPanel Spacing="8">
+                            <TextBlock Classes="sectionTitle" Text="Адрес доставки" />
+                            <ComboBox MinHeight="40" FontSize="14"
+                                      ItemsSource="{Binding AddressOptions}"
+                                      SelectedIndex="{Binding AddressMode, Mode=TwoWay}" />
+                            <Border IsVisible="{Binding IsSavedVisible}" Background="#26262E"
+                                    CornerRadius="10" Padding="14">
+                                <StackPanel Spacing="2">
+                                    <TextBlock Text="Выбранный адрес" Foreground="#80808C" FontSize="12" />
+                                    <TextBlock Text="{Binding SavedAddressText}" Foreground="#E9E9F1"
+                                               FontSize="14" TextWrapping="Wrap" />
+                                </StackPanel>
+                            </Border>
+                            <StackPanel Spacing="4" IsVisible="{Binding IsManualVisible}">
+                                <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                                    <StackPanel Spacing="2">
+                                        <TextBox Text="{Binding Postcode, Mode=TwoWay}"
+                                                 PlaceholderText="Индекс *"
+                                                 Classes.error="{Binding IsPostcodeInvalid}" />
+                                        <TextBlock Classes="hint"
+                                                   Text="{Binding PostcodeHint}"
+                                                   Foreground="{Binding PostcodeHint, Converter={StaticResource HintBrush}}" />
+                                    </StackPanel>
+                                    <StackPanel Grid.Column="1" Spacing="2">
+                                        <TextBox Text="{Binding City, Mode=TwoWay}"
+                                                 PlaceholderText="Город *"
+                                                 Classes.error="{Binding IsCityInvalid}" />
+                                        <TextBlock Classes="hint"
+                                                   Text="{Binding CityHint}"
+                                                   Foreground="{Binding CityHint, Converter={StaticResource HintBrush}}" />
+                                    </StackPanel>
+                                </Grid>
+                                <Grid ColumnDefinitions="*,160" ColumnSpacing="12">
+                                    <StackPanel Spacing="2">
+                                        <TextBox Text="{Binding Street, Mode=TwoWay}"
+                                                 PlaceholderText="Улица *"
+                                                 Classes.error="{Binding IsStreetInvalid}" />
+                                        <TextBlock Classes="hint"
+                                                   Text="{Binding StreetHint}"
+                                                   Foreground="{Binding StreetHint, Converter={StaticResource HintBrush}}" />
+                                    </StackPanel>
+                                    <StackPanel Grid.Column="1" Spacing="2">
+                                        <TextBox Text="{Binding House, Mode=TwoWay}"
+                                                 PlaceholderText="Дом *"
+                                                 Classes.error="{Binding IsHouseInvalid}" />
+                                        <TextBlock Classes="hint"
+                                                   Text="{Binding HouseHint}"
+                                                   Foreground="{Binding HouseHint, Converter={StaticResource HintBrush}}" />
+                                    </StackPanel>
+                                </Grid>
+                                <StackPanel Spacing="2">
+                                    <TextBox Text="{Binding Apartment, Mode=TwoWay}"
+                                             PlaceholderText="Квартира"
+                                             Classes.error="{Binding IsApartmentInvalid}" />
+                                    <TextBlock Classes="hint"
+                                               Text="{Binding ApartmentHint}"
+                                               Foreground="{Binding ApartmentHint, Converter={StaticResource HintBrush}}" />
+                                </StackPanel>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                    <Border Background="#1F1F24" CornerRadius="14" Padding="20">
+                        <StackPanel Spacing="8">
+                            <TextBlock Classes="sectionTitle" Text="Получатель" />
+                            <StackPanel Spacing="2">
+                                <TextBox Text="{Binding Recipient, Mode=TwoWay}"
+                                         PlaceholderText="ФИО получателя *"
+                                         Classes.error="{Binding IsRecipientInvalid}" />
+                                <TextBlock Classes="hint"
+                                           Text="{Binding RecipientHint}"
+                                           Foreground="{Binding RecipientHint, Converter={StaticResource HintBrush}}" />
+                            </StackPanel>
+                            <StackPanel Spacing="2">
+                                <TextBox Text="{Binding Phone, Mode=TwoWay}"
+                                         PlaceholderText="Телефон *"
+                                         Classes.error="{Binding IsPhoneInvalid}" />
+                                <TextBlock Classes="hint"
+                                           Text="{Binding PhoneHint}"
+                                           Foreground="{Binding PhoneHint, Converter={StaticResource HintBrush}}" />
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                    <Border Background="#1F1F24" CornerRadius="14" Padding="20">
+                        <StackPanel Spacing="8">
+                            <TextBlock Classes="sectionTitle" Text="Бонусные баллы" />
+                            <TextBlock Text="{Binding BonusAvailableText}" Foreground="#FFD166"
+                                       FontSize="13" />
+                            <StackPanel Spacing="2">
+                                <TextBox Text="{Binding BonusText, Mode=TwoWay}"
+                                         PlaceholderText="Сколько списать"
+                                         Classes.error="{Binding IsBonusInvalid}" />
+                                <TextBlock Classes="hint"
+                                           Text="{Binding BonusHint}"
+                                           Foreground="{Binding BonusHint, Converter={StaticResource HintBrush}}" />
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+                <Border Grid.Column="0" IsVisible="{Binding IsQrVisible}" Background="#1F1F24"
+                        CornerRadius="14" Padding="40">
+                    <StackPanel Spacing="14" HorizontalAlignment="Center">
+                        <TextBlock Text="Оплата заказа" Foreground="White" FontSize="20"
+                                   FontWeight="Bold" HorizontalAlignment="Center" />
+                        <TextBlock Text="Отсканируйте QR-код в приложении банка"
+                                   Foreground="#B9B9C3" FontSize="14"
+                                   HorizontalAlignment="Center" />
+                        <Border Background="White" CornerRadius="12" Padding="16"
+                                HorizontalAlignment="Center"
+                                IsVisible="{Binding HasQrImage}">
+                            <Image Source="{Binding QrImage}" Width="280" Height="280"
+                                   Stretch="Uniform" />
+                        </Border>
+                        <TextBlock Text="{Binding QrStatus}" Foreground="{Binding QrStatusColor}"
+                                   FontSize="14" TextWrapping="Wrap" TextAlignment="Center"
+                                   MaxWidth="420" />
+                        <TextBlock Text="{Binding TotalText}" Foreground="#FFD166" FontSize="24"
+                                   FontWeight="Bold" HorizontalAlignment="Center" />
+                        <StackPanel Orientation="Horizontal" Spacing="12" HorizontalAlignment="Center">
+                            <Button Classes="primary" Content="Я оплатил"
+                                    Command="{Binding ConfirmPayCommand}" Padding="28,12" />
+                            <Button Classes="secondary" Content="← Изменить данные"
+                                    Command="{Binding CancelQrCommand}" Padding="20,12" />
+                        </StackPanel>
+                        <TextBlock Text="{Binding Status}" Foreground="{Binding StatusColor}"
+                                   FontSize="14" TextWrapping="Wrap" TextAlignment="Center"
+                                   MaxWidth="420" />
+                    </StackPanel>
+                </Border>
+                <Border Grid.Column="0" IsVisible="{Binding IsPaid}" Background="#1F1F24"
+                        CornerRadius="14" Padding="40">
+                    <StackPanel Spacing="14" HorizontalAlignment="Center">
+                        <TextBlock Text="{Binding Status}" Foreground="#4ADE80" FontSize="20"
+                                   FontWeight="Bold" TextWrapping="Wrap" TextAlignment="Center" />
+                        <TextBlock Text="Мы отправим уведомление о доставке после обработки заказа."
+                                   Foreground="#80808C" FontSize="14" TextAlignment="Center" />
+                        <Button Classes="primary" Content="Вернуться к товарам"
+                                Command="{Binding GoHomeCommand}" Padding="28,12"
+                                HorizontalAlignment="Center" />
+                    </StackPanel>
+                </Border>
+                <Border Grid.Column="1" Background="#1F1F24" CornerRadius="14" Padding="20"
+                        HorizontalAlignment="Stretch">
+                    <StackPanel Spacing="10">
+                        <TextBlock Classes="sectionTitle" Text="Финальный чек" />
+                        <ItemsControl ItemsSource="{Binding Groups}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate x:DataType="vm:CartGroupViewModel">
+                                    <StackPanel Spacing="3" Margin="0,0,0,8">
+                                        <TextBlock Text="{Binding SellerName}" Foreground="#FFD166"
+                                                   FontSize="13" FontWeight="SemiBold" />
+                                        <ItemsControl ItemsSource="{Binding Items}">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate x:DataType="models:CartItem">
+                                                    <Grid ColumnDefinitions="*,Auto" Margin="0,1">
+                                                        <TextBlock Foreground="#B9B9C3" FontSize="13">
+                                                            <TextBlock.Text>
+                                                                <MultiBinding StringFormat="{}{0} ×{1}">
+                                                                    <Binding Path="Title" />
+                                                                    <Binding Path="Quantity" />
+                                                                </MultiBinding>
+                                                            </TextBlock.Text>
+                                                        </TextBlock>
+                                                        <TextBlock Grid.Column="1" Text="{Binding LineTotalText}"
+                                                                   Foreground="#E9E9F1" FontSize="13" />
+                                                    </Grid>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                        <Grid ColumnDefinitions="*,Auto" Margin="0,2,0,0">
+                                            <TextBlock Text="Доставка" Foreground="#80808C" FontSize="12" />
+                                            <TextBlock Grid.Column="1" Text="{Binding DeliveryText}"
+                                                       Foreground="#FFD166" FontSize="12" />
+                                        </Grid>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                        <Border Height="1" Background="#33FFFFFF" />
+                        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="16">
+                            <TextBlock Text="Товары" Foreground="#B9B9C3" FontSize="14" />
+                            <TextBlock Grid.Column="1" Text="{Binding SubtotalText}"
+                                       Foreground="White" FontSize="14" />
+                        </Grid>
+                        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="16"
+                              IsVisible="{Binding HasPromoDiscount}">
+                            <TextBlock Text="Скидка по промокоду" Foreground="#B9B9C3" FontSize="14" />
+                            <TextBlock Grid.Column="1" Text="{Binding PromoDiscountText}"
+                                       Foreground="#4ADE80" FontSize="14" />
+                        </Grid>
+                        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="16"
+                              IsVisible="{Binding HasBonusDiscount}">
+                            <TextBlock Text="Списание бонусов" Foreground="#B9B9C3" FontSize="14" />
+                            <TextBlock Grid.Column="1" Text="{Binding BonusDiscountText}"
+                                       Foreground="#4ADE80" FontSize="14" />
+                        </Grid>
+                        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="16">
+                            <TextBlock Text="Доставка" Foreground="#B9B9C3" FontSize="14" />
+                            <TextBlock Grid.Column="1" Text="{Binding DeliverySumText}"
+                                       Foreground="#FFD166" FontSize="14" />
+                        </Grid>
+                        <Border Height="1" Background="#33FFFFFF" />
+                        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="16">
+                            <TextBlock Text="К оплате" Foreground="White" FontSize="20"
+                                       FontWeight="Bold" VerticalAlignment="Center" />
+                            <TextBlock Grid.Column="1" Text="{Binding TotalText}" Foreground="White"
+                                       FontSize="24" FontWeight="Bold" />
+                        </Grid>
+                        <Button Classes="primary" Content="Оплатить заказ"
+                                Command="{Binding PayCommand}"
+                                HorizontalAlignment="Stretch" Padding="0,13" FontSize="16"
+                                Margin="0,6,0,0" />
+                        <TextBlock Text="{Binding Status}" Foreground="{Binding StatusColor}"
+                                   FontSize="14" TextWrapping="Wrap" />
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

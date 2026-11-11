@@ -1,0 +1,201 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:MegaMarketLibnk.ViewModels"
+             xmlns:models="using:MegaMarketLibnk.Models"
+             mc:Ignorable="d" d:DesignWidth="1400" d:DesignHeight="800"
+             x:Class="MegaMarketLibnk.Views.CartView"
+             x:DataType="vm:CartViewModel">
+    <UserControl.Styles>
+        <Style Selector="Button.qty">
+            <Setter Property="Background" Value="#2E2E36" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="CornerRadius" Value="8" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="Width" Value="30" />
+            <Setter Property="Height" Value="30" />
+            <Setter Property="FontSize" Value="15" />
+        </Style>
+        <Style Selector="Button.remove">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="#F87171" />
+            <Setter Property="Padding" Value="8,4" />
+            <Setter Property="CornerRadius" Value="8" />
+        </Style>
+    </UserControl.Styles>
+    <Grid RowDefinitions="Auto,*" Background="#141417">
+        <Border Grid.Row="0" Background="#1F1F24" Padding="24,12">
+            <StackPanel Orientation="Horizontal" Spacing="16">
+                <Button Classes="secondary" Content="← К товарам" Command="{Binding BackCommand}" />
+                <TextBlock Text="Корзина" FontSize="21" FontWeight="Bold"
+                           Foreground="White" VerticalAlignment="Center" />
+                <TextBlock Text="{Binding ItemsSummary}" Foreground="#B9B9C3" FontSize="14"
+                           VerticalAlignment="Center" />
+            </StackPanel>
+        </Border>
+        <ScrollViewer Grid.Row="1" Margin="28,24">
+            <StackPanel Spacing="18" MaxWidth="980" HorizontalAlignment="Left">
+                <Border IsVisible="{Binding IsEmpty}" Background="#1F1F24" CornerRadius="14" Padding="40">
+                    <StackPanel Spacing="8" HorizontalAlignment="Center">
+                        <TextBlock Text="Корзина пуста" Foreground="White" FontSize="18"
+                                   FontWeight="Bold" HorizontalAlignment="Center" />
+                        <TextBlock Text="Добавьте товары — они появятся здесь, сгруппированные по продавцам"
+                                   Foreground="#80808C" FontSize="14" TextWrapping="Wrap"
+                                   TextAlignment="Center" />
+                    </StackPanel>
+                </Border>
+                <ItemsControl ItemsSource="{Binding Groups}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate x:DataType="vm:CartGroupViewModel">
+                            <Border Background="#1F1F24" CornerRadius="14" Padding="20" Margin="0,0,0,4">
+                                <StackPanel Spacing="12">
+                                    <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10">
+                                        <Border Background="#5B4FE0" CornerRadius="8" Padding="10,4">
+                                            <TextBlock Text="Отправка" Foreground="White" FontSize="12"
+                                                       FontWeight="SemiBold" />
+                                        </Border>
+                                        <TextBlock Grid.Column="1" Text="{Binding SellerName}"
+                                                   Foreground="White" FontSize="16" FontWeight="SemiBold"
+                                                   VerticalAlignment="Center" TextWrapping="Wrap" />
+                                        <TextBlock Grid.Column="2" Text="{Binding ItemsSummary}"
+                                                   Foreground="#80808C" FontSize="13"
+                                                   VerticalAlignment="Center" />
+                                    </Grid>
+                                    <ItemsControl ItemsSource="{Binding Items}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate x:DataType="models:CartItem">
+                                                <Grid ColumnDefinitions="44,*,Auto,Auto,Auto"
+                                                      ColumnSpacing="12" Margin="0,4">
+                                                    <Border Width="44" Height="44" CornerRadius="8"
+                                                            Background="{Binding Color}" />
+                                                    <StackPanel Grid.Column="1" VerticalAlignment="Center"
+                                                                Spacing="2">
+                                                        <TextBlock Text="{Binding Title}" Foreground="#E9E9F1"
+                                                                   FontSize="14" TextWrapping="Wrap" />
+                                                        <StackPanel Orientation="Horizontal" Spacing="10">
+                                                            <TextBlock Text="{Binding PriceText}"
+                                                                       Foreground="#B9B9C3" FontSize="13" />
+                                                            <TextBlock Text="{Binding UnitParamsText}"
+                                                                       Foreground="#80808C" FontSize="12" />
+                                                        </StackPanel>
+                                                    </StackPanel>
+                                                    <StackPanel Grid.Column="2" Orientation="Horizontal"
+                                                                Spacing="8" VerticalAlignment="Center">
+                                                        <Button Classes="qty" Content="−"
+                                                                Command="{Binding DecreaseCommand}" />
+                                                        <TextBlock Text="{Binding Quantity}" Foreground="White"
+                                                                   FontSize="15" MinWidth="18"
+                                                                   TextAlignment="Center"
+                                                                   VerticalAlignment="Center" />
+                                                        <Button Classes="qty" Content="+"
+                                                                Command="{Binding IncreaseCommand}" />
+                                                    </StackPanel>
+                                                    <TextBlock Grid.Column="3" Text="{Binding LineTotalText}"
+                                                               Foreground="White" FontSize="15"
+                                                               FontWeight="SemiBold" VerticalAlignment="Center" />
+                                                    <Button Grid.Column="4" Classes="remove" Content="✕"
+                                                            Command="{Binding RemoveCommand}"
+                                                            ToolTip.Tip="Удалить из корзины"
+                                                            VerticalAlignment="Center" />
+                                                </Grid>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                    <Border Background="#26262E" CornerRadius="10" Padding="14">
+                                        <StackPanel Spacing="4">
+                                            <Grid ColumnDefinitions="*,*" ColumnSpacing="12" Margin="0,2">
+                                                <StackPanel Orientation="Horizontal" Spacing="6">
+                                                    <TextBlock Text="Вес:" Foreground="#80808C" FontSize="13" />
+                                                    <TextBlock Text="{Binding WeightText}" Foreground="White"
+                                                               FontSize="13" FontWeight="SemiBold" />
+                                                </StackPanel>
+                                                <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="6">
+                                                    <TextBlock Text="Объём:" Foreground="#80808C" FontSize="13" />
+                                                    <TextBlock Text="{Binding VolumeText}" Foreground="White"
+                                                               FontSize="13" FontWeight="SemiBold" />
+                                                </StackPanel>
+                                            </Grid>
+                                            <Border Height="1" Background="#33FFFFFF" Margin="0,4" />
+                                            <TextBlock Text="Стоимость доставки:" Foreground="#B9B9C3"
+                                                       FontSize="13" FontWeight="SemiBold" />
+                                            <TextBlock Text="{Binding BaseLine}" Foreground="#80808C"
+                                                       FontSize="12" />
+                                            <TextBlock Text="{Binding WeightLine}" Foreground="#80808C"
+                                                       FontSize="12" />
+                                            <TextBlock Text="{Binding VolumeLine}" Foreground="#80808C"
+                                                       FontSize="12" />
+                                            <Grid ColumnDefinitions="*,*" Margin="0,4,0,0">
+                                                <TextBlock Text="Итого доставка:" Foreground="#B9B9C3"
+                                                           FontSize="14" FontWeight="SemiBold" />
+                                                <TextBlock Grid.Column="1" Text="{Binding DeliveryText}"
+                                                           Foreground="#FFD166" FontSize="14"
+                                                           FontWeight="Bold" TextAlignment="Right" />
+                                            </Grid>
+                                        </StackPanel>
+                                    </Border>
+                                    <Grid ColumnDefinitions="*,*">
+                                        <TextBlock Text="{Binding SubtotalText}" Foreground="#B9B9C3"
+                                                   FontSize="14" />
+                                        <TextBlock Grid.Column="1" Text="{Binding TotalText}"
+                                                   Foreground="White" FontSize="16" FontWeight="Bold"
+                                                   TextAlignment="Right" />
+                                    </Grid>
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+                <Border IsVisible="{Binding HasItems}" Background="#1F1F24" CornerRadius="14" Padding="20"
+                        Margin="0,4,0,24">
+                    <StackPanel Spacing="12">
+                            <StackPanel Spacing="6">
+                                <TextBlock Text="Промокод" Foreground="White" FontSize="15"
+                                           FontWeight="SemiBold" />
+                                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
+                                    <TextBox Text="{Binding PromoText, Mode=TwoWay}"
+                                             PlaceholderText="Например, СКИДКА10" />
+                                    <Button Grid.Column="1" Classes="primary" Content="Применить"
+                                            Command="{Binding ApplyPromoCommand}" Padding="24,10" />
+                                </Grid>
+                                <TextBlock Text="{Binding PromoStatus}"
+                                           Foreground="{Binding PromoStatusColor}" FontSize="13"
+                                           IsVisible="{Binding HasPromoStatus}" />
+                                <TextBlock Text="Доступны: СКИДКА10 (−10%), 500 (−500 ₽), ФРИШИП (бесплатная доставка)"
+                                           Foreground="#80808C" FontSize="12" TextWrapping="Wrap" />
+                            </StackPanel>
+                            <Border Height="1" Background="#33FFFFFF" />
+                            <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto,Auto,Auto"
+                                  ColumnSpacing="24" RowSpacing="8">
+                                <TextBlock Text="Товары" Foreground="#B9B9C3" FontSize="15" />
+                                <TextBlock Grid.Column="1" Text="{Binding SubtotalText}" Foreground="White"
+                                           FontSize="15" TextAlignment="Right" />
+                                <TextBlock Grid.Row="1" Text="Скидка" Foreground="#80808C" FontSize="14"
+                                           IsVisible="{Binding HasDiscount}" />
+                                <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding DiscountText}"
+                                           Foreground="#4ADE80" FontSize="15" TextAlignment="Right"
+                                           IsVisible="{Binding HasDiscount}" />
+                                <TextBlock Grid.Row="2" Text="Доставка" Foreground="#B9B9C3" FontSize="15" />
+                                <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding DeliveryText}"
+                                           Foreground="#FFD166" FontSize="15" FontWeight="SemiBold"
+                                           TextAlignment="Right" />
+                                <TextBlock Grid.Row="3" Text="{Binding ItemsSummary}" Foreground="#80808C"
+                                           FontSize="13" VerticalAlignment="Center" />
+                                <Button Grid.Row="3" Grid.Column="1" Classes="secondary"
+                                        Content="Очистить корзину" Command="{Binding ClearCartCommand}" />
+                                <TextBlock Grid.Row="4" Text="Итого" Foreground="White" FontSize="20"
+                                           FontWeight="Bold" VerticalAlignment="Center" />
+                                <TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding TotalText}"
+                                           Foreground="White" FontSize="26" FontWeight="Bold"
+                                           TextAlignment="Right" />
+                            </Grid>
+                            <Button Classes="primary" Content="Оплатить"
+                                    Command="{Binding CheckoutCommand}"
+                                    HorizontalAlignment="Stretch" Padding="0,13" FontSize="16"
+                                    Margin="0,4,0,0" />
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

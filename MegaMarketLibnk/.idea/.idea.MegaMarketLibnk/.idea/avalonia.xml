@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AvaloniaProject">
+    <option name="projectPerEditor">
+      <map>
+        <entry key="MegaMarketLibnk/App.axaml" value="MegaMarketLibnk/MegaMarketLibnk.csproj" />
+        <entry key="MegaMarketLibnk/ViewModels/RegistrationViewModel.axaml" value="MegaMarketLibnk/MegaMarketLibnk.csproj" />
+        <entry key="MegaMarketLibnk/Views/AdminCabinetView.axaml" value="MegaMarketLibnk/MegaMarketLibnk.csproj" />
+        <entry key="MegaMarketLibnk/Views/AuthView.axaml" value="MegaMarketLibnk/MegaMarketLibnk.csproj" />
+        <entry key="MegaMarketLibnk/Views/BuyerCabinetView.axaml" value="MegaMarketLibnk/MegaMarketLibnk.csproj" />
+        <entry key="MegaMarketLibnk/Views/CartView.axaml" value="MegaMarketLibnk/MegaMarketLibnk.csproj" />
+        <entry key="MegaMarketLibnk/Views/CheckoutView.axaml" value="MegaMarketLibnk/MegaMarketLibnk.csproj" />
+        <entry key="MegaMarketLibnk/Views/HomeView.axaml" value="MegaMarketLibnk/MegaMarketLibnk.csproj" />
+        <entry key="MegaMarketLibnk/Views/MainWindow.axaml" value="MegaMarketLibnk/MegaMarketLibnk.csproj" />
+        <entry key="MegaMarketLibnk/Views/ProductView.axaml" value="MegaMarketLibnk/MegaMarketLibnk.csproj" />
+        <entry key="MegaMarketLibnk/Views/RegisterView.axaml" value="MegaMarketLibnk/MegaMarketLibnk.csproj" />
+        <entry key="MegaMarketLibnk/Views/SellerCabinetView.axaml" value="MegaMarketLibnk/MegaMarketLibnk.csproj" />
+      </map>
+    </option>
+  </component>
+</project>

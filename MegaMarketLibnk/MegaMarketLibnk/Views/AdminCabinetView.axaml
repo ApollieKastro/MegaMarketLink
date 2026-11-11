@@ -1,0 +1,72 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:MegaMarketLibnk.ViewModels"
+             x:Class="MegaMarketLibnk.Views.AdminCabinetView"
+             x:DataType="vm:AdminCabinetViewModel">
+    <Grid RowDefinitions="Auto,*" Background="#141417">
+        <Border Grid.Row="0" Background="#1F1F24" Padding="24,12">
+            <Grid ColumnDefinitions="*,Auto">
+                <TextBlock Text="Админ-панель" FontSize="21" FontWeight="Bold" Foreground="White" />
+                <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8">
+                    <Button Classes="secondary" Content="Обновить" Command="{Binding RefreshCommand}" />
+                    <Button Classes="secondary" Content="На главную" Command="{Binding GoHomeCommand}" />
+                    <Button Classes="secondary" Content="Выйти" Command="{Binding LogoutCommand}" />
+                </StackPanel>
+            </Grid>
+        </Border>
+        <ScrollViewer Grid.Row="1">
+            <StackPanel Margin="24" Spacing="16">
+                <Border Background="#1F1F24" CornerRadius="8" Padding="12">
+                    <StackPanel Spacing="8">
+                        <TextBlock Text="Очередь товаров на модерацию" Foreground="White" FontWeight="Bold" />
+                        <ItemsControl ItemsSource="{Binding PendingProducts}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate x:DataType="vm:AdminProductRow">
+                                    <StackPanel Orientation="Horizontal" Spacing="8" Margin="0,4">
+                                        <TextBlock Text="{Binding Name}" Foreground="White" />
+                                        <TextBlock Text="{Binding Sku}" Foreground="#B9B9C3" />
+                                        <Button Content="Одобрить" Command="{Binding $parent[UserControl].((vm:AdminCabinetViewModel)DataContext).ApproveCommand}" CommandParameter="{Binding}" />
+                                        <Button Content="Отклонить" Command="{Binding $parent[UserControl].((vm:AdminCabinetViewModel)DataContext).RejectCommand}" CommandParameter="{Binding}" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                </Border>
+                <Border Background="#1F1F24" CornerRadius="8" Padding="12">
+                    <StackPanel Spacing="8">
+                        <TextBlock Text="Пользователи" Foreground="White" FontWeight="Bold" />
+                        <ItemsControl ItemsSource="{Binding Users}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate x:DataType="vm:AdminUserRow">
+                                    <StackPanel Orientation="Horizontal" Spacing="8" Margin="0,4">
+                                        <TextBlock Text="{Binding Email}" Foreground="White" />
+                                        <TextBlock Text="{Binding Role}" Foreground="#B9B9C3" />
+                                        <TextBlock Text="{Binding IsBanned}" Foreground="#F87171" />
+                                        <Button Content="Блок/Разблок" Command="{Binding $parent[UserControl].((vm:AdminCabinetViewModel)DataContext).ToggleBanCommand}" CommandParameter="{Binding}" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                </Border>
+                <Border Background="#1F1F24" CornerRadius="8" Padding="12">
+                    <StackPanel Spacing="8">
+                        <TextBlock Text="Адреса (ФИАС/КЛАДР)" Foreground="White" FontWeight="Bold" />
+                        <ItemsControl ItemsSource="{Binding Addresses}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate x:DataType="vm:AdminAddressRow">
+                                    <StackPanel Orientation="Horizontal" Spacing="8" Margin="0,4">
+                                        <TextBlock Text="{Binding Region}" Foreground="#B9B9C3" />
+                                        <TextBlock Text="{Binding City}" Foreground="White" />
+                                        <TextBlock Text="{Binding Street}" Foreground="#B9B9C3" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

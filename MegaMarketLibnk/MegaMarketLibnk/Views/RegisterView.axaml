@@ -1,0 +1,106 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:MegaMarketLibnk.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="1166" d:DesignHeight="643"
+             x:Class="MegaMarketLibnk.Views.RegisterView"
+             x:DataType="vm:RegisterViewModel">
+    <Design.DataContext>
+        <vm:RegisterViewModel />
+    </Design.DataContext>
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Spacing="16" Width="760" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="24,16">
+            <TextBlock Classes="pageTitle" Text="Выберите кто вы:" />
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="24">
+                <Button Classes="role buyer" Classes.selected="{Binding IsBuyerView}"
+                        Command="{Binding SelectBuyerCommand}" Width="260">
+                    <StackPanel Spacing="6">
+                        <TextBlock Text="ВЫ ПОКУПАТЕЛЬ" FontWeight="Bold" FontSize="15" HorizontalAlignment="Center"
+                                   Margin="0,0,0,6" />
+                        <TextBlock Text="•  Заказ товаров" />
+                        <TextBlock Text="•  История покупок" />
+                        <TextBlock Text="•  Статус заказа" />
+                    </StackPanel>
+                </Button>
+                <Button Classes="role seller" Classes.selected="{Binding IsSellerView}" Command="{Binding SelectSellerCommand}"
+                        Width="260">
+                    <StackPanel Spacing="6">
+                        <TextBlock Text="ВЫ ПРОДАВЕЦ" FontWeight="Bold" FontSize="15" HorizontalAlignment="Center" Margin="0,0,0,6" />
+                        <TextBlock Text="•  Создание карточек товара" TextWrapping="Wrap" />
+                        <TextBlock Text="•  Просмотр остатка товаров на складе" TextWrapping="Wrap" />
+                        <TextBlock Text="•  Продажа товара" />
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+            <Border Background="#CC1B1B1F" BorderBrush="#33FFFFFF" BorderThickness="1"  CornerRadius="16" Padding="28"
+                    Margin="80,0,80,0">
+                <StackPanel Spacing="8">
+                    <TextBlock Text="Регистрация" FontSize="22" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center"
+                               Margin="0,0,0,8" />
+                    <StackPanel Spacing="8" IsVisible="{Binding IsBuyerView}">
+                        <TextBox PlaceholderText="Имя" Text="{Binding FirstName, Mode=TwoWay}" />
+                        <TextBlock Classes="hint" Text="{Binding FirstNameHint}"
+                                   Foreground="{Binding FirstNameHint, Converter={StaticResource HintBrush}}" />
+                        <TextBox PlaceholderText="Фамилия"
+                                 Text="{Binding LastName, Mode=TwoWay}" />
+                        <TextBlock Classes="hint" Text="{Binding LastNameHint}"
+                                   Foreground="{Binding LastNameHint, Converter={StaticResource HintBrush}}" />
+                    </StackPanel>
+                    <TextBox PlaceholderText="Email" Text="{Binding Email, Mode=TwoWay}" />
+                    <TextBlock Classes="hint"   Text="{Binding EmailHint}"
+                               Foreground="{Binding EmailHint, Converter={StaticResource HintBrush}}" />
+                    <TextBox PlaceholderText="Пароль" PasswordChar="*" Text="{Binding Password, Mode=TwoWay}" />
+                    <TextBlock Classes="hint" Text="{Binding PasswordHint}"
+                               Foreground="{Binding PasswordHint, Converter={StaticResource HintBrush}}" />
+                    <TextBox PlaceholderText="Подтверждение пароля" PasswordChar="*"
+                             Text="{Binding PasswordConfirm, Mode=TwoWay}" />
+                    <TextBlock Classes="hint" Text="{Binding PasswordConfirmHint}"
+                               Foreground="{Binding PasswordConfirmHint, Converter={StaticResource HintBrush}}" />
+                    <TextBox PlaceholderText="Телефон" Text="{Binding Phone, Mode=TwoWay}" />
+                    <TextBlock Classes="hint" Text="{Binding PhoneHint}"
+                               Foreground="{Binding PhoneHint, Converter={StaticResource HintBrush}}" />
+                    <Border Background="#26FFFFFF"
+                            CornerRadius="8"
+                            Padding="12,8"
+                            Margin="0,6,0,0">
+                        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
+                            <TextBlock Text="{Binding CaptchaCode}" FontFamily="Consolas,Menlo,monospace"
+                                       FontSize="24"  FontWeight="Bold" Foreground="#FFD166" HorizontalAlignment="Center"
+                                       VerticalAlignment="Center" />
+                            <Button Grid.Column="1" Content="Обновить" Classes="secondary" Command="{Binding RefreshCaptchaCommand}"
+                                    VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                    <TextBox PlaceholderText="Код с картинки" Text="{Binding CaptchaInput, Mode=TwoWay}" />
+                    <TextBlock Classes="hint" Text="{Binding CaptchaHint}"
+                               Foreground="{Binding CaptchaHint, Converter={StaticResource HintBrush}}" />
+                    <StackPanel Spacing="8" IsVisible="{Binding IsSellerView}" Margin="0,8,0,0">
+                        <Separator />
+                        <TextBlock Text="Данные продавца" FontWeight="SemiBold" Foreground="#FFD166" />
+                        <TextBox PlaceholderText="Название компании"
+                                 Text="{Binding CompanyName, Mode=TwoWay}" />
+                        <TextBlock Classes="hint" Text="{Binding CompanyNameHint}"
+                                   Foreground="{Binding CompanyNameHint, Converter={StaticResource HintBrush}}" />
+                        <TextBox PlaceholderText="ИНН (10 или 12 цифр)"
+                                 Text="{Binding Inn, Mode=TwoWay}" />
+                        <TextBlock Classes="hint" Text="{Binding InnHint}"
+                                   Foreground="{Binding InnHint, Converter={StaticResource HintBrush}}" />
+                        <TextBox PlaceholderText="Подтверждение ИНН"
+                                 Text="{Binding InnConfirm, Mode=TwoWay}" />
+                        <TextBlock Classes="hint" Text="{Binding InnConfirmHint}"
+                                   Foreground="{Binding InnConfirmHint, Converter={StaticResource HintBrush}}" />
+                        <Button Classes="secondary" Content="Отправить ИНН на проверку" 
+                                Command="{Binding CheckInnCommand}" HorizontalAlignment="Stretch" />
+                    </StackPanel>
+                    <Button Classes="primary" Content="Зарегистрироваться" Command="{Binding RegisterCommand}"
+                            HorizontalAlignment="Stretch" Margin="0,10,0,0" />
+                    <Button Classes="secondary" Content="Вход" Command="{Binding BackToAuthCommand}"
+                            HorizontalAlignment="Stretch" />
+                    <TextBlock Text="{Binding Status}" Foreground="#FFD166" FontSize="13"
+                               TextWrapping="Wrap" HorizontalAlignment="Center" Margin="0,6,0,0" />
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
